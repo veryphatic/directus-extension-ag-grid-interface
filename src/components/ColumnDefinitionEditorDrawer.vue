@@ -7,7 +7,13 @@ import {
 import { useColumnDefinitions } from "../hooks/useColumnDefinition";
 import { GridSettings } from "handsontable/settings";
 import SystemRawEditor from "../system-raw-editor/system-raw-editor.vue";
-import { CellType } from "handsontable/cellTypes";
+
+import {BaseCellDataType, ColDef} from "ag-grid-community"
+
+/**
+ * ColumnDefinitionEditorDrawer
+ * Column definition builder
+ */
 
 const props = defineProps<{
   column: Partial<ColumnDefinitionProperties>;
@@ -43,7 +49,7 @@ const emitUpdate = () => {
 };
 
 // Only avilable for new configurations
-const onUpdateCellType = (value: CellType) => {
+const onSelectCellType = (value: BaseCellDataType) => {
   didMutate.value = true;
   inputType.value = value;
   columnSettings.value = buildNewColumnDefinitions(value) as GridSettings;
@@ -73,10 +79,14 @@ const updateField = (
   // emitUpdate();
 };
 
-const buildNewColumnDefinitions = (type: CellType) => {
+// const buildNewColumnDefinitions = (type: CellType) => {
+const buildNewColumnDefinitions = (type: BaseCellDataType) => {
   if (!configurationDefinitionInputs.value) return {};
 
-  let columnDefinition: GridSettings = {
+  // let columnDefinition: GridSettings = {
+  //   type: type,
+  // };
+  let columnDefinition: ColDef = {
     type: type,
   };
 
@@ -163,7 +173,7 @@ const saveDefinition = () => {
           <v-select
             v-model="inputType"
             :items="cellTypesList"
-            @update:modelValue="onUpdateCellType"
+            @update:modelValue="onSelectCellType"
           />
         </div>
       </template>

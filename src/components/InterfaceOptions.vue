@@ -2,7 +2,14 @@
 import { ref, toRaw, toRefs } from "vue";
 import { ColumnDefinitionProperties } from "../types";
 import ColumnDefinitionEditorDrawer from "./ColumnDefinitionEditorDrawer.vue";
-import { GridSettings } from "handsontable/settings";
+import {  } from "ag-grid-vue3";
+
+/**
+ * InterfaceOptions
+ * This is the component used to build the AG-Grid grid configurations:
+ * - column definitions
+ * - grid options
+ */
 
 const props = defineProps<{
   value: Record<string, any> | null;
@@ -64,6 +71,10 @@ const onCloseColumnDefinition = () => {
 
 const onDeleteColumnDefinition = (idx: number) => {
   console.log("delete index", idx);
+  // columDefinitions.value = { ...columDefinitions.value.splice(idx,1) }
+  columDefinitions.value.splice(idx,1);
+  console.log('deleted::updated columnDefinition', columDefinitions.value)
+  emitUpdate();
 };
 
 const onEditDefinition = (idx: number) => {
@@ -84,7 +95,7 @@ const emitUpdate = () => {
 
 <template>
   <div class="form">
-    <div class="field">
+    <!-- <div class="field">
       <div class="label type-label">
         Handsontable Licence Key
         <span class="required">
@@ -98,7 +109,7 @@ const emitUpdate = () => {
           Get Handsontable here
         </a>
       </small>
-    </div>
+    </div> -->
 
     <!-- Table options -->
     <!-- columnSorting -->

@@ -32,6 +32,28 @@ const props = defineProps<{
   licenseKey: string;
 }>();
 
+// const props = defineProps<{
+//     // directus props
+//     value:
+//       | (number | string | Record<string, any>)[]
+//       | Record<string, any>
+//       | null;
+//     primaryKey: string | number;
+//     collection: string;
+//     field: string;
+//     disabled?: boolean;
+//     showNavigation?: boolean;
+
+//     // interface props
+//    licenseKey: string;
+//    columDefinitions: ColumnDefinitionProperties[]
+// }>;
+
+// const { value, primaryKey, collection, field, disabled, showNavigation, licenseKey, columnDefinitions } = toRefs(props);
+
+// console.log('props', props);
+
+
 const hotSettings = ref<GridSettings>({
     
 });
