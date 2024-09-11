@@ -1,12 +1,14 @@
 ## WHERE AM I
 
 [] disable the save button if the form isn't valid (show a error message when clicked and the form isn't valid)
-
+[] add delete button
 
 ## TODO
 
 [] rearrange the key to be at the top
 [] make the key not editable when editing an existing configuration
+[] fix up the tsc linting
+[] add code formatter
 
 [x] create state for the form
 [x] decide: when user changes field type do you

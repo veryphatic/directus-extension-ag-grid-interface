@@ -2,7 +2,7 @@
 import { ref, toRaw, toRefs } from "vue";
 import { ColumnDefinitionProperties } from "../types";
 import ColumnDefinitionEditorDrawer from "./ColumnDefinitionEditorDrawer.vue";
-import {  } from "ag-grid-vue3";
+import { ColDef } from "ag-grid-community";
 
 /**
  * InterfaceOptions
@@ -24,8 +24,8 @@ const emit = defineEmits<{
   (e: "input", value: Record<string, any> | null): void;
 }>();
 
-const licenceKey = ref<string>(value.value?.licenceKey ?? "");
-const columDefinitions = ref<ColumnDefinitionProperties[]>(
+// const licenceKey = ref<string>(value.value?.licenceKey ?? "");
+const columDefinitions = ref<ColDef[]>(
   value.value?.columDefinitions ?? [],
 );
 const selectedColumnDefinition = ref<Partial<ColumnDefinitionProperties> | undefined>(undefined);
@@ -85,9 +85,9 @@ const onEditDefinition = (idx: number) => {
 }
 
 const emitUpdate = () => {
-  console.log("emit update", licenceKey.value);
+  // console.log("emit update", licenceKey.value);
   emit("input", {
-    licenceKey: licenceKey.value,
+    // licenceKey: licenceKey.value,
     columDefinitions: columDefinitions.value,
   });
 };
@@ -132,7 +132,7 @@ const emitUpdate = () => {
             }"
           >
             <span>
-              {{ definition.header }}
+              {{ definition.headerName }}
               <VChip :xSmall="true">{{ definition.type }}</VChip></span
             >
             <v-icon name="close" @click="() => onDeleteColumnDefinition(idx)" />

@@ -1,333 +1,144 @@
-import { CellType } from "handsontable/cellTypes";
 import { InterfaceConfigProperties } from "./../types";
 
 const useColumnDefinitions = () => {
-    const cellTypesList = [
-        { value: "autocomplete", text: "Autocomplete" },
-        { value: "checkbox", text: "Checkbox" },
-        { value: "date", text: "Date " },
-        { value: "dropdown", text: "Dropdown" },
-        { value: "numeric", text: "Numeric" },
+    const cellEditors = [
+        { value: "boolean", text: "Boolean" },
+        { value: "date", text: "Date" },
+        { value: "dateString", text: "Date String" },
+        { value: "select", text: "Select" },
+        { value: "number", text: "Number" },
         { value: "text", text: "Text" },
-        { value: "time", text: "Time" },
+        { value: "largeText", text: "Large Text" }
     ];
 
+    const commonColumnConfigurations: InterfaceConfigProperties[] = [
+        { type: "string", name: "headerName", label: "Header Name", fill: "fullCol", required: true, help: 'The name to render in the column header.' },
+        { type: "string", name: "colId", label: "Column ID", fill: "fullCol", required: true, help: 'This column\'s unique ID (cannot be changed after save)', transformValue: 'snakecase' },
+        { type: "checkbox", name: "editable", label: "Editable", fill: "halfCol", required: false, help: 'Set to `true` if this column is editable, otherwise `false`.' },
+        { type: "checkbox", name: "singleClickEdit", label: "Single Click Edit", fill: "halfCol", required: false, help: ' Set to `true` to have the text wrap inside the cell - typically used with `autoHeight`.' },
+        { type: "checkbox", name: "autoHeight", label: "Auto Height", fill: "halfCol", required: false, help: 'Set to `true` to have the grid calculate the height of a row based on contents of this column.' },
+        { type: "checkbox", name: "wrapText", label: "Wrap Text", fill: "halfCol", required: false, help: 'Set to `true` to have cells under this column enter edit mode after single click.' },
+        { type: "number", name: "width", label: "Width", fill: "fullCol", required: false, help: 'Initial width in pixels for the cell.' },
+        { type: "number", name: "flex", label: "Flex", fill: "fullCol", required: false, help: 'Used instead of `width` when the goal is to fill the remaining empty space of the grid.' },
+        { type: "code", name: "valueGetter", label: "Value Getter", required: false, help: 'Function or expression. Gets the value from your data for display.' },
+        { type: "code", name: "valueSetter", label: "Value Setter", required: false, help: 'Function or expression. Sets the value into your data for saving. Return `true` if the data changed.' },
+        { type: "code", name: "valueParser", label: "Value Parser", required: false, help: 'Function or expression. Parses the value for saving.' },
+    ]
+
     const interfaceConfigDefinitions: Record<string, InterfaceConfigProperties[]> = {
-        checkbox: [
+        boolean: [
+            ...commonColumnConfigurations,
             {
                 type: "info",
                 name: "info",
                 fill: 'fullCol',
-                value:
-                    "Create interactive elements that can be checked or unchecked, by using the checkbox cell type.",
-                info_url: "https://handsontable.com/docs/javascript-data-grid/checkbox-cell-type/",
+                value: "The 'boolean' cell data type is used for boolean values.",
+                info_url: "https://www.ag-grid.com/vue-data-grid/cell-data-types/#boolean",
             },
-            { type: "string", name: "header", label: "Column Header", fill: "fullCol" },
-            { type: "string", name: "key", label: "Key", fill: "fullCol", required: true, help: 'This column\'s key (cannot be changed after save)'},
-            {
-                type: "string",
-                name: "checkedTemplate",
-                label: "Checked template",
-                fill: "halfCol",
-                help: "The checkedTemplate option lets you configure what value an checked checkbox cell has. (Default: true)",
-                default: true,
-                url: "https://handsontable.com/docs/react-data-grid/api/options/#checkedtemplate",
-            },
-            {
-                type: "string",
-                name: "uncheckedTemplate",
-                label: "Unchecked template",
-                fill: "halfCol",
-                default: false,
-                help: 'The uncheckedTemplate option lets you configure what value an unchecked checkbox cell has. (Default: false)',
-                url: "https://handsontable.com/docs/react-data-grid/api/options/#uncheckedtemplate",
-            },
-            {
-                type: "string",
-                name: "label.value",
-                label: "Label text",
-                fill: 'halfCol'
-            },
-            {
-                type: "string",
-                name: "label.separated",
-                label: "Label separated",
-                fill: 'halfCol'
-            },
-            {
-                type: "string",
-                name: "label.position",
-                label: "Label position",
-                help: "Default value is `false`",
-                fill: 'halfCol',
-                default: false,
-                url: "https://handsontable.com/docs/react-data-grid/api/options/#label",
-            },
-            {
-                type: "string",
-                name: "defaultValue",
-                label: "Default value",
-                fill: "fullCol",
-            }
         ],
         date: [
+            ...commonColumnConfigurations,
+            { type: "string", name: "min", label: "Min", fill: "halfCol", required: false, help: 'Min allowed value. String in format "yyyy-mm-dd"' },
+            { type: "string", name: "max", label: "Max", fill: "halfCol", required: false, help: 'Max allowed value. String in format "yyyy-mm-dd"' },
+            {
+                type: "number", name: "step", label: "Step", fill: "halfCol", required: false, help: `Size of the value change when stepping up/down, starting from min or the initial value if provided. 
+                Step is also the difference between valid values. If the user-provided value isn\'t a multiple of the step value from the starting value, it will be considered invalid. Defaults to any value allowed.` },
             {
                 type: "info",
                 name: "info",
                 fill: 'fullCol',
-                value:
-                    "Use the date cell type to display, format, and validate date values. Pick a date using an interactive pop-up editor.",
-                info_url: "https://handsontable.com/docs/javascript-data-grid/date-cell-type/",
+                value: "The 'date' cell data type is used for date values that are represented as Date objects.",
+                info_url: "https://www.ag-grid.com/vue-data-grid/cell-data-types/#date",
             },
-            { type: "string", name: "header", label: "Column Header", fill: "fullCol" },
-            { type: "string", name: "key", label: "Key", fill: "fullCol", required: true, help: 'This column\'s key (cannot be changed after save)'},
-            {
-                type: "string",
-                name: "dateFormat",
-                label: "Date Format",
-                fill: "halfCol",
-                default: 'DD/MM/YYYY',
-                help: "You can set the dateFormat option to a string with a proper date format. (Default: DD/MM/YYYY)",
-                url: "https://handsontable.com/docs/react-data-grid/api/options/#dateformat",
-            },
-            {
-                type: "checkbox",
-                name: "correctFormat",
-                label: "Correct format?",
-                fill: "halfCol",
-                default: false,
-                help: 'The correctFormat option configures whether incorrectly-formatted times and dates are amended or not. (Default: false)',
-                url: 'https://handsontable.com/docs/react-data-grid/api/options/#correctformat'
-            },
-            {
-                type: "string",
-                name: "defaultDate",
-                label: "Default date",
-                fill: "fullCol",
-            }
         ],
-        autocomplete: [
+        dateString: [
+            ...commonColumnConfigurations,
+            { type: "string", name: "min", label: "Min", fill: "halfCol", required: false, help: 'Min allowed value. String in format "yyyy-mm-dd"' },
+            { type: "string", name: "max", label: "Max", fill: "halfCol", required: false, help: 'Max allowed value. String in format "yyyy-mm-dd"' },
             {
-                type: "info",
-                name: 'info',
-                fill: 'fullCol',
-                value:
-                    `
-                    Collect user input with a list of choices, by using the autocomplete cell type. You can complete the autocomplete cell type in three different ways:
-                    - Flexible mode
-                    - Strict mode
-                    - Strict mode using Ajax
-            `,
-                info_url: "https://handsontable.com/docs/react-data-grid/autocomplete-cell-type/",
+                type: "number", name: "step", label: "Step", fill: "halfCol", required: false, help: `Size of the value change when stepping up/down, starting from min or the initial value if provided. \
+                Step is also the difference between valid values. If the user-provided value isn\'t a multiple of the step value from the starting value, it will be considered invalid. Defaults to any value allowed.`
             },
-            { type: "string", name: "header", label: "Column Header", fill: "fullCol" },
-            { type: "string", name: "key", label: "Key", fill: "fullCol", required: true, help: 'This column\'s key (cannot be changed after save)'},
-            {
-                type: "checkbox",
-                name: "allowHTML",
-                label: "Allow HTML?",
-                fill: "halfCol",
-                default: false,
-                help: "The allowHtml option configures whether autocomplete and dropdown cells' source data is treated as HTML. (Default: false)"
-            },
-            {
-                type: "checkbox",
-                name: "filteringCaseSensitive",
-                label: "Filter using case-sensitivity?",
-                fill: "halfCol",
-                default: false,
-                help: "The filteringCaseSensitive option configures whether autocomplete cells' input is case-sensitive. (Default: false)"
-            },
-            {
-                type: "code",
-                name: "source",
-                label: "Source",
-                fill: "fullCol",
-                required: true,
-                help: "The source option sets options available in autocomplete and dropdown cells. You must return an array or a function (returns array)",
-                url: "https://handsontable.com/docs/react-data-grid/api/options/#source",
-            },
-            {
-                type: "checkbox",
-                name: "strict",
-                label: "Set the strict mode (strict/flexible)",
-                fill: "halfCol",
-                default: false,
-                help: `
-                Strict mode (true). The end user: 
-                - Can only choose one of suggested values
-                - Can't enter a custom value
-                Flexible mode(false). The end user:
-                - Can choose one of suggested values
-                - Can enter a custom value
-                `,
-                url: 'https://handsontable.com/docs/react-data-grid/api/options/#strict'
-            },
-            {
-                type: "number",
-                name: "visibleRows",
-                label: "Number visible rows",
-                fill: "halfCol",
-                default: false
-            },
-            {
-                type: "checkbox",
-                name: "trimDropdown",
-                label: "Trim dropdown",
-                fill: "halfCol",
-                help: 'The trimDropdown option configures the width of the autocomplete and dropdown lists.'
-            },
-            {
-                type: "string",
-                name: "defaultValue",
-                label: "Default value",
-                fill: "fullCol",
-            }
-        ],
-        dropdown: [
             {
                 type: "info",
                 name: "info",
                 fill: 'fullCol',
-                value:
-                    "Collect user input with a searchable list of choices, by using the dropdown cell type.",
-                info_url: "https://handsontable.com/docs/javascript-data-grid/dropdown-cell-type/",
+                value: "The 'dateString' cell data type is used for date values that are represented as string values.",
+                info_url: "https://www.ag-grid.com/vue-data-grid/cell-data-types/#date-as-string",
             },
-            { type: "string", name: "header", label: "Column Header", fill: "fullCol" },
-            { type: "string", name: "key", label: "Key", fill: "fullCol", required: true, help: 'This column\'s key (cannot be changed after save)'},
+        ],
+        select: [
+            ...commonColumnConfigurations,
+            { type: "code", name: "values", label: "Values", fill: "fullCol", required: false, help: 'List of values to display' },
+            { type: "number", name: "valueListGap", label: "Value List Gap", fill: "fullCol", required: false, help: 'The space in pixels between the value display and the list of items.' },
+            { type: "number", name: "valueListMaxHeight", label: "Value List Max Height", fill: "halfCol", required: false, help: 'The maximum height of the list of items as pixels.' },
+            { type: "number", name: "valueListMaxWidth", label: "Value List Max Width", fill: "halfCol", required: false, help: 'The maximum width of the list of items as pixels.' },
             {
-                type: "checkbox",
-                name: "allowHTML",
-                label: "Allow HTML?",
-                fill: "halfCol",
-                help: "The allowHtml option configures whether autocomplete and dropdown cells' source data is treated as HTML. (Default: false)"
-            },
-            {
-                type: "code",
-                name: "source",
-                label: "Source",
-                fill: "fullCol",
-                help: "The source option sets options available in autocomplete and dropdown cells. You must return an array or a function (returns array)",
-                url: "https://handsontable.com/docs/react-data-grid/api/options/#source",
-            },
-            {
-                type: "number",
-                name: "visibleRows",
-                label: "Number visible rows",
-                fill: "halfCol",
-                default: false
+                type: "info",
+                name: "info",
+                fill: 'fullCol',
+                value: "The 'select editor' is a 'text' cell data type and used for string values.",
+                info_url: "https://www.ag-grid.com/vue-data-grid/cell-data-types/#text",
             },
 
-            {
-                type: "checkbox",
-                name: "trimDropdown",
-                label: "Trim dropdown",
-                fill: "halfCol",
-                help: 'The trimDropdown option configures the width of the autocomplete and dropdown lists.'
-            },
-            {
-                type: "string",
-                name: "defaultValue",
-                label: "Default value",
-                fill: "fullCol",
-            }
         ],
-        numeric: [
+        number: [
+            ...commonColumnConfigurations,
+            { type: "number", name: "min", label: "Min Value", fill: "halfCol", required: false, help: 'Min allowed value.' },
+            { type: "number", name: "max", label: "Max Value", fill: "halfCol", required: false, help: 'Max allowed value.' },
+            { type: "number", name: "precision", label: "Precision", fill: "halfCol", required: false, help: 'Number of digits allowed after the decimal point.' },
+            { type: "number", name: "step", label: "Step", fill: "halfCol", required: false, help: 'Size of the value change when stepping up/down, starting from min or the initial value if provided.' },
+            { type: "checkbox", name: "showStepperButtons", label: "Show Stepper Buttons", fill: "halfCol", required: false, help: 'Display stepper buttons in editor.' },
+            { type: "checkbox", name: "preventStepping", label: "Prevent Stepping", fill: "halfCol", required: false, help: 'Set to true to prevent key up/down from stepping the field\'s value.' },
             {
                 type: "info",
                 name: "info",
                 fill: 'fullCol',
-                value:
-                    "Display, format, sort, and filter numbers correctly by using the numeric cell type.",
-                info_url: "https://handsontable.com/docs/javascript-data-grid/numeric-cell-type/",
+                value: "The 'number' cell data type is used for number values.",
+                info_url: "https://www.ag-grid.com/vue-data-grid/cell-data-types/#number",
             },
-            { type: "string", name: "header", label: "Column Header", fill: "fullCol" },
-            { type: "string", name: "key", label: "Key", fill: "fullCol", required: true, help: 'This column\'s key (cannot be changed after save)'},
-            {
-                type: "string",
-                name: "numericFormat.pattern",
-                label: "Pattern",
-                fill: "halfCol",
-                url: "https://handsontable.com/docs/react-data-grid/api/options/#numericformat",
-            },
-            {
-                type: "string",
-                name: "numericFormat.culture",
-                label: "Culture",
-                fill: "halfCol",
-                url: "https://handsontable.com/docs/react-data-grid/api/options/#numericformat",
-            },
-            {
-                type: "string",
-                name: "defaultValue",
-                label: "Default value",
-                fill: "fullCol",
-            },
-            {
-                type: "checkbox",
-                name: "allowEmpty",
-                label: "Allow empty values?",
-                fill: "halfCol",
-            }
-        ],
-        time: [
-            {
-                type: "info",
-                name: "info",
-                fill: 'fullCol',
-                value:
-                    "Use the time cell type to display, format, and validate values as times. The time cell type uses Moment.js as a time formatter.",
-                info_url: "https://handsontable.com/docs/javascript-data-grid/time-cell-type/",
-            },
-            { type: "string", name: "header", label: "Column Header", fill: "fullCol" },
-            { type: "string", name: "key", label: "Key", fill: "fullCol", required: true, help: 'This column\'s key (cannot be changed after save)'},
-            {
-                type: "string",
-                name: "timeFormat",
-                label: "Time Format",
-                fill: "halfCol",
-                help: "(Default format: h:mm:ss a)",
-                default: 'h:mm:ss a',
-                url: "https://handsontable.com/docs/react-data-grid/api/options/#timeformat",
-            },
-            {
-                type: "checkbox",
-                name: "correctiFormat",
-                label: "Correct format?",
-                default: true,
-                help: "(Default: true)",
-                fill: "halfCol",
-            },
-            {
-                type: "string",
-                name: "defaultValue",
-                label: "Default value",
-                fill: "fullCol",
-            }
         ],
         text: [
+            ...commonColumnConfigurations,
+            { type: "number", name: "maxLength", label: "Max Length", fill: "fullCol", required: false, help: 'Max number of characters to allow. (Default is 524288)' },
             {
                 type: "info",
                 name: "info",
                 fill: 'fullCol',
-                value: "The text cell type is the default type.",
-                info_url: "https://handsontable.com/docs/javascript-data-grid/cell-type/",
+                value: "The 'text' cell data type is used for string values. ",
+                info_url: "https://www.ag-grid.com/vue-data-grid/cell-data-types/#text",
             },
-            { type: "string", name: "header", label: "Column Header", fill: "fullCol" },
-            { type: "string", name: "key", label: "Key", fill: "fullCol", required: true, help: 'This column\'s key (cannot be changed after save)'},
+        ],
+        largeText: [
+            ...commonColumnConfigurations,
+            { type: "number", name: "maxLength", label: "Max Length", fill: "fullCol", required: false, help: 'Max number of characters to allow. (Default is 200)' },
+            { type: "number", name: "rows", label: "Rows", fill: "fullCol", required: false, help: 'Number of character rows to display. (Default is 10)' },
+            { type: "number", name: "cols", label: "Cols", fill: "fullCol", required: false, help: 'Number of character columns to display. (Default is 60)' },
             {
-                type: "string",
-                name: "defaultValue",
-                label: "Default value",
-            }
-            
+                type: "info",
+                name: "info",
+                fill: 'fullCol',
+                value: "The 'large text editor' is a 'text' cell data type and used for string values. ",
+                info_url: "https://www.ag-grid.com/vue-data-grid/cell-data-types/#text",
+            },
         ],
     };
 
     return {
-        cellTypesList,
+        cellTypesList: cellEditors,
         interfaceConfigDefinitions,
     };
 };
 
 export { useColumnDefinitions };
+
+
+/**
+            // {
+            //     type: "info",
+            //     name: "info",
+            //     fill: 'fullCol',
+            //     value: "The 'date' cell data type is used for date values that are represented as Date objects.",
+            //     info_url: "https://www.ag-grid.com/vue-data-grid/cell-data-types/#date",
+            // },
+ */

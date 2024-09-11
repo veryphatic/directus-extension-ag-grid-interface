@@ -29,6 +29,7 @@ export type InterfaceConfigProperties = {
     url?: string,
     info_url?: string,
     required?: boolean
+    transformValue?: string
 }
 
 

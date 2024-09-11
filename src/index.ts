@@ -5,9 +5,9 @@ import InterfaceOptions from './components/InterfaceOptions.vue';
 
 export default defineInterface({
 	id: 'veryphatic-handsontable',
-	name: 'Handsontable Interface',
+	name: 'AG-Grid Interface',
 	icon: 'table',
-	description: 'JSON formatted Handsontable Interface',
+	description: 'JSON formatted AG Grid Interface',
 	component: HandsontableInterface,
 	options: InterfaceOptions as ComponentOptions,
 	types: ['json'],

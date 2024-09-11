@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@handsontable/vue3": "^14.1.0",
+    "ag-grid-vue3": "^32.1.0",
     "codemirror": "5.65.16",
     "handsontable": "^14.1.0",
     "lodash": "^4.17.21"

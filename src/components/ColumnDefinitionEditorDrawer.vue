@@ -8,7 +8,7 @@ import { useColumnDefinitions } from "../hooks/useColumnDefinition";
 import { GridSettings } from "handsontable/settings";
 import SystemRawEditor from "../system-raw-editor/system-raw-editor.vue";
 
-import {BaseCellDataType, ColDef} from "ag-grid-community"
+import { BaseCellDataType, ColDef } from "ag-grid-community";
 
 /**
  * ColumnDefinitionEditorDrawer
@@ -41,7 +41,7 @@ const configurationDefinitionInputs = computed(() => {
 
 const closeDrawer = () => {
   // showDrawer.value = false;
-  emit('close');
+  emit("close");
 };
 
 const emitUpdate = () => {
@@ -64,7 +64,7 @@ const updateField = (
   let transformedValue = value;
 
   // handle keys
-  if (field.name === "key" && !!transformedValue) {
+  if (field.transformValue === "snakecase" && !!transformedValue) {
     transformedValue = (value as string).toLowerCase().replace(/\s+/g, "_");
   }
 
@@ -119,34 +119,36 @@ const isFormValid = computed(() => {
 
   // iterate over each columnDefinition and validate against configurationDefinitionInputs
   // for (const key in configurationDefinitionInputs.value) {
-  configurationDefinitionInputs.value?.forEach(def => {
+  configurationDefinitionInputs.value?.forEach((def) => {
     if (def.required) requiredInputs.push(def.name);
-  })
+  });
   //   console.log('key ---', key);
   //   if (configurationDefinitionInputs.value[key]?.required) requiredInputs.push(key);
   // }
-  
-  console.log('requiredInputs', requiredInputs, configurationDefinitionInputs.value)
+
+  console.log(
+    "requiredInputs",
+    requiredInputs,
+    configurationDefinitionInputs.value,
+  );
 
   if (!requiredInputs.length) return true;
 
-  return requiredInputs.some(input => {
-    const nestedKeys = input.split('.');
+  return requiredInputs.some((input) => {
+    const nestedKeys = input.split(".");
     const baseKey = nestedKeys[0];
     const childKey = nestedKeys[1];
 
-    console.log('checking ...', baseKey, columnSettings.value)
+    console.log("checking ...", baseKey, columnSettings.value);
 
     if (nestedKeys.length > 1) {
-      console.log('checking nested input', columnSettings.value[baseKey])
-      return !!columnSettings.value[baseKey][childKey] 
+      console.log("checking nested input", columnSettings.value[baseKey]);
+      return !!columnSettings.value[baseKey][childKey];
     }
-    console.log('checking input', columnSettings.value[baseKey])
+    console.log("checking input", columnSettings.value[baseKey]);
     return !!columnSettings.value[baseKey];
-  })
-
-})
-
+  });
+});
 
 const saveDefinition = () => {
   // validate values
@@ -203,7 +205,7 @@ const saveDefinition = () => {
             <!-- Label -->
             <template v-if="field.label">
               <div class="label type-label">
-                <span> {{ field.label }} {{ field.required ? '*' : '' }}</span>
+                <span> {{ field.label }} {{ field.required ? "*" : "" }}</span>
               </div>
             </template>
 
@@ -272,7 +274,7 @@ const saveDefinition = () => {
         :icon="true"
         :rounded="true"
       >
-      <VIcon name="check" />
+        <VIcon name="check" />
       </VButton>
     </template>
   </v-drawer>
