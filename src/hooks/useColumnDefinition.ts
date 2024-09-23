@@ -18,11 +18,12 @@ const useColumnDefinitions = () => {
         { type: "checkbox", name: "singleClickEdit", label: "Single Click Edit", fill: "halfCol", required: false, help: ' Set to `true` to have the text wrap inside the cell - typically used with `autoHeight`.' },
         { type: "checkbox", name: "autoHeight", label: "Auto Height", fill: "halfCol", required: false, help: 'Set to `true` to have the grid calculate the height of a row based on contents of this column.' },
         { type: "checkbox", name: "wrapText", label: "Wrap Text", fill: "halfCol", required: false, help: 'Set to `true` to have cells under this column enter edit mode after single click.' },
-        { type: "number", name: "width", label: "Width", fill: "fullCol", required: false, help: 'Initial width in pixels for the cell.' },
-        { type: "number", name: "flex", label: "Flex", fill: "fullCol", required: false, help: 'Used instead of `width` when the goal is to fill the remaining empty space of the grid.' },
+        { type: "number", name: "width", label: "Width", fill: "halfCol", required: false, help: 'Initial width in pixels for the cell.' },
+        { type: "number", name: "flex", label: "Flex", fill: "halfCol", required: false, help: 'Used instead of `width` when the goal is to fill the remaining empty space of the grid.' },
         { type: "code", name: "valueGetter", label: "Value Getter", required: false, help: 'Function or expression. Gets the value from your data for display.' },
         { type: "code", name: "valueSetter", label: "Value Setter", required: false, help: 'Function or expression. Sets the value into your data for saving. Return `true` if the data changed.' },
         { type: "code", name: "valueParser", label: "Value Parser", required: false, help: 'Function or expression. Parses the value for saving.' },
+        { type: "code", name: "valueFormatter", label: "Value Formatter", required: false, help: 'A function or expression to format a value, should return a string.' },
     ]
 
     const interfaceConfigDefinitions: Record<string, InterfaceConfigProperties[]> = {
