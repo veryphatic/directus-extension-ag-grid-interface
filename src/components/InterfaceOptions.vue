@@ -1,15 +1,12 @@
 <script lang="ts" setup>
-import { ref, toRaw, toRefs } from "vue";
-import { ColumnDefinitionProperties } from "../types";
+import { ref, toRaw, toRefs, nextTick } from "vue";
 import ColumnDefinitionEditorDrawer from "./ColumnDefinitionEditorDrawer.vue";
 import { ColDef } from "ag-grid-community";
-
-/**
- * InterfaceOptions
- * This is the component used to build the AG-Grid grid configurations:
- * - column definitions
- * - grid options
- */
+import { useColumnDefinitions } from "../hooks/useColumnDefinition";
+import {
+  useSortable,
+  moveArrayElement,
+} from "@vueuse/integrations/useSortable";
 
 const props = defineProps<{
   value: Record<string, any> | null;
@@ -18,99 +15,92 @@ const props = defineProps<{
 
 console.log("props ...", toRaw(props));
 
-const { value, collection } = toRefs(props);
+const { value } = toRefs(props);
 
 const emit = defineEmits<{
   (e: "input", value: Record<string, any> | null): void;
 }>();
 
-// const licenceKey = ref<string>(value.value?.licenceKey ?? "");
-const columDefinitions = ref<ColDef[]>(
-  value.value?.columDefinitions ?? [],
-);
-const selectedColumnDefinition = ref<Partial<ColumnDefinitionProperties> | undefined>(undefined);
+const el = ref<HTMLElement | null>(null);
+
+const columnDefinitions = ref<ColDef[]>(value.value?.columnDefinitions ?? []);
+const selectedColumnDefinition = ref<Partial<ColDef>>();
 const selectedColumnDefinitionIndex = ref<number | null>(null);
-
 const columnDefinitionEditorOpen = ref<boolean>(false);
-console.log("initial columDefinitions", columDefinitions.value);
-// const generateFromSelect = ref<string>();
 
+const { cellEditors } = useColumnDefinitions();
+useSortable(el, columnDefinitions, {
+  onUpdate: (e) => {
+    // do something
+    moveArrayElement(columnDefinitions.value, e.oldIndex, e.newIndex);
+    // nextTick required here as moveArrayElement is executed in a microtas
+    // so we need to wait until the next tick until that is finished.
+    nextTick(() => {
+      /* do something */
+      emitUpdate();
+    });
+  },
+});
+
+// add columnn definition button action
 const addColumnDefinition = () => {
   selectedColumnDefinition.value = undefined;
   columnDefinitionEditorOpen.value = true;
 };
 
-const onUpdateColumnDefinition = (update: ColumnDefinitionProperties) => {
-  // selectedColumnDefinition.value = undefined;
-  // set the `columnDefinitions` property with the correct index or new item
-  if (selectedColumnDefinitionIndex.value === null) {
-    console.log("null index:: create new");
-    columDefinitions.value = [...columDefinitions.value, update];
-  } else {
-    console.log("match index", selectedColumnDefinitionIndex.value, columDefinitions.value);
-    columDefinitions.value = columDefinitions.value.map((def, idx) => {
-      console.log('idx--selectedIdx', idx, selectedColumnDefinitionIndex.value, idx = selectedColumnDefinitionIndex.value, typeof idx, typeof selectedColumnDefinitionIndex.value)
-      if (idx === selectedColumnDefinitionIndex.value) {
-        console.log('match::::', update)
-        return update;
-      }
-      console.log('no match:::')
-      return def;
-    })
-  }
-  console.log("update to column setting", update);
-  console.log("updated columDefinitions", columDefinitions.value);
-  emitUpdate();
-};
-
+// on drawer close actions
 const onCloseColumnDefinition = () => {
   columnDefinitionEditorOpen.value = false;
   selectedColumnDefinition.value = undefined;
   selectedColumnDefinitionIndex.value = null;
 };
 
-const onDeleteColumnDefinition = (idx: number) => {
-  console.log("delete index", idx);
-  // columDefinitions.value = { ...columDefinitions.value.splice(idx,1) }
-  columDefinitions.value.splice(idx,1);
-  console.log('deleted::updated columnDefinition', columDefinitions.value)
+// columnn update action
+const onUpdateColumnDefinition = (update: ColDef) => {
+  if (selectedColumnDefinitionIndex.value === null) {
+    columnDefinitions.value = [...columnDefinitions.value, update];
+  } else {
+    columnDefinitions.value = columnDefinitions.value.map((def, idx) => {
+      if (idx === selectedColumnDefinitionIndex.value) {
+        return update;
+      }
+      return def;
+    });
+  }
+
   emitUpdate();
 };
 
-const onEditDefinition = (idx: number) => {
-  console.log('edit definition', idx);
-  selectedColumnDefinitionIndex.value = idx;
-  selectedColumnDefinition.value = { ...columDefinitions.value[idx] }
-  columnDefinitionEditorOpen.value = true;
-}
+// on delete configuration action
+const onDeleteColumnDefinition = (idx: number) => {
+  columnDefinitions.value.splice(idx, 1);
+  emitUpdate();
+};
 
+// on edit configuration action
+const onEditDefinition = (idx: number) => {
+  selectedColumnDefinitionIndex.value = idx;
+  selectedColumnDefinition.value = { ...columnDefinitions.value[idx] };
+  columnDefinitionEditorOpen.value = true;
+};
+
+// emit action
 const emitUpdate = () => {
-  // console.log("emit update", licenceKey.value);
+  console.log("emitUpdate", columnDefinitions.value);
   emit("input", {
-    // licenceKey: licenceKey.value,
-    columDefinitions: columDefinitions.value,
+    columnDefinitions: columnDefinitions.value,
   });
+};
+
+// lookup the cell editor type
+const lookupCellEditorType = (cellEditor: string) => {
+  const ce = cellEditors.find((editor) => editor.cellEditor === cellEditor);
+  return ce?.text;
 };
 </script>
 
 <template>
   <div class="form">
-    <!-- <div class="field">
-      <div class="label type-label">
-        Handsontable Licence Key
-        <span class="required">
-          <v-icon name="star" filled sup />
-        </span>
-      </div>
-      <v-input v-model="licenceKey" @update:modelValue="emitUpdate" />
-      <small>
-        Handsontable is licenced software.
-        <a href="https://handsontable.com/" target="_blank">
-          Get Handsontable here
-        </a>
-      </small>
-    </div> -->
-
     <!-- Table options -->
     <!-- columnSorting -->
     <!-- height -->
@@ -120,10 +110,17 @@ const emitUpdate = () => {
     <div class="field">
       <p class="type-label">Column definitions</p>
 
-      <!-- <template v-if="columDefinitions.length"> -->
-      <!-- List of definitions  @todo: move to component-->
-      <v-list v-for="(definition, idx) in columDefinitions">
-        <v-list-item class="listItem" block :key="definition.key" :clickable="true" @click="()=> onEditDefinition(idx)">
+      <!-- list of column configurations -->
+
+      <v-list ref="el">
+        <v-list-item
+          v-for="(column, idx) in columnDefinitions"
+          class="listItem"
+          block
+          :key="column.colId"
+          :clickable="true"
+          @click="() => onEditDefinition(idx)"
+        >
           <div
             :style="{
               display: 'flex',
@@ -131,19 +128,37 @@ const emitUpdate = () => {
               justifyContent: 'space-between',
             }"
           >
-            <span>
-              {{ definition.headerName }}
-              <VChip :xSmall="true">{{ definition.type }}</VChip></span
-            >
-            <v-icon name="close" @click="() => onDeleteColumnDefinition(idx)" />
+            <!-- <div class="input"> -->
+            <div>
+              <span class="v-icon drag-handle" :style="{ marginRight: '1rem' }">
+                <v-icon name="drag_indicator" />
+              </span>
+            </div>
+
+            <div :style="{ flexGrow: 1 }">
+              <div class="label-inner">
+                <span :style="{ marginRight: '1rem'}">{{ column.headerName }}</span>
+
+                <VChip :xSmall="true">
+                  {{ lookupCellEditorType(column.cellEditor) }}
+                </VChip>
+              </div>
+            </div>
+
+            <div>
+              <v-icon
+                name="close"
+                @click="() => onDeleteColumnDefinition(idx)"
+              />
+            </div>
           </div>
         </v-list-item>
       </v-list>
 
       <div :style="{ marginTop: '1rem' }">
-        <v-button @click="addColumnDefinition" :small="true"
-          >Add column definition</v-button
-        >
+        <VButton @click="addColumnDefinition" :small="true">
+          Add column definition
+        </VButton>
       </div>
 
       <!-- Column definition drawer -->
@@ -154,23 +169,8 @@ const emitUpdate = () => {
           @close="onCloseColumnDefinition"
         />
       </template>
-
     </div>
   </div>
-
-  <!-- Repeater -->
-  <!-- <div v-for="column in" -->
-  <!-- heading -->
-  <!-- type -->
-  <!-- default value -->
-
-  <!-- Rows -->
-  <!-- Default number -->
-  <!-- or -->
-  <!-- Generator -->
-  <!-- Rows from selection <columns with select> -->
-
-  <!-- Preview -->
 </template>
 
 <style scoped>
@@ -186,7 +186,7 @@ const emitUpdate = () => {
   grid-column: start/fill;
 }
 .label {
-  margin-bottom: 8px;
+  /* margin-bottom: 8px; */
 }
 .required {
   --v-icon-color: var(--theme--primary);

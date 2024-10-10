@@ -34,10 +34,19 @@
     "vue": "^3.4.19"
   },
   "dependencies": {
+    "@ag-grid-community/client-side-row-model": "^32.2.2",
+    "@ag-grid-community/core": "^32.2.2",
+    "@ag-grid-community/csv-export": "^32.2.2",
+    "@ag-grid-community/styles": "^32.2.2",
+    "@ag-grid-community/vue3": "^32.2.2",
+    "@directus/sdk": "^17.0.2",
     "@handsontable/vue3": "^14.1.0",
+    "@vueuse/core": "^11.1.0",
+    "@vueuse/integrations": "^11.1.0",
     "ag-grid-vue3": "^32.1.0",
     "codemirror": "5.65.16",
     "handsontable": "^14.1.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "sortablejs": "^1.15.3"
   }
 }
