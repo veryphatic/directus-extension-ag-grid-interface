@@ -1,6 +1,5 @@
 export function getDefaultValue(cellEditor: string, currentUser: string) {
     let value = null;
-    console.log("type", cellEditor);
     switch (cellEditor) {
         case "agTextCellEditor":
         case "agLargeTextCellEditor":
