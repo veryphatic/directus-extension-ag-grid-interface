@@ -242,5 +242,4 @@ const emitUpdate = () => {
   <div :style="{ marginTop: '1rem' }">
     <VButton @click="addRow" small>Add Row</VButton>
   </div>
-  <pre>{{ rowData }}</pre>
 </template>
