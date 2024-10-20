@@ -5,6 +5,8 @@ type WindowSizeOptions = {
 	throttle: number;
 };
 
+// source https://github.com/directus/directus/blob/75080fa20b8a5dd27964862fd163fa8c275e11b9/app/src/composables/use-window-size.ts
+
 export function useWindowSize(options: WindowSizeOptions = { throttle: 100 }): {
 	width: Ref<number>;
 	height: Ref<number>;

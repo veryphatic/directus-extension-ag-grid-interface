@@ -3,6 +3,8 @@ import { parseJSON } from './parse-json';
 
 /**
  * Get a JSON stringified version of a value based on its type or if it should be treated like an object
+ * 
+ * source: https://github.com/directus/directus/blob/75080fa20b8a5dd27964862fd163fa8c275e11b9/app/src/utils/get-stringified-value.ts
  *
  * @param value - Value to be JSON stringified
  * @param isObjectLike - Should the value be treated like an object

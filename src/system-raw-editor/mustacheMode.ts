@@ -1,3 +1,4 @@
+// source https://github.com/directus/directus/blob/75080fa20b8a5dd27964862fd163fa8c275e11b9/app/src/interfaces/_system/system-raw-editor/mustacheMode.ts
 export const mustacheMode = {
 	start: [{ regex: /\{\{/, push: 'mustache', token: 'tag' }],
 	mustache: [
