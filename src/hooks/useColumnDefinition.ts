@@ -6,12 +6,13 @@ const useColumnDefinitions = () => {
 
     const cellEditors: CellEditorType[] = [
         { value: "boolean", text: "Boolean", cellDataType: 'boolean', cellEditor: "agCheckboxCellEditor" },
-        { value: "date", text: "Date", cellDataType: 'date', cellEditor: "agDateCellEditor" },
+        // { value: "date", text: "Date", cellDataType: 'date', cellEditor: "agDateCellEditor" },
         { value: "dateString", text: "Date String", cellDataType: 'dateString', cellEditor: "agDateStringCellEditor" },
         { value: "select", text: "Select", cellDataType: 'text', cellEditor: "agSelectCellEditor" },
         { value: "number", text: "Number", cellDataType: 'number', cellEditor: "agNumberCellEditor" },
         { value: "text", text: "Text", cellDataType: 'text', cellEditor: "agTextCellEditor" },
-        { value: "largeText", text: "Large Text", cellDataType: 'text', cellEditor: "agLargeTextCellEditor" }
+        { value: "largeText", text: "Large Text", cellDataType: 'text', cellEditor: "agLargeTextCellEditor" },
+        { value: "currentUser", text: "Current User", cellDataType: 'text', cellEditor: "SystemUserEditor" },
     ];
 
     const commonColumnConfigurations: InterfaceConfigProperties[] = [
@@ -28,6 +29,7 @@ const useColumnDefinitions = () => {
         { type: "code", name: "valueSetter", label: "Value Setter", fill: "fullCol", required: false, help: 'Function or expression. Sets the value into your data for saving. Return `true` if the data changed.' },
         { type: "code", name: "valueParser", label: "Value Parser", fill: "fullCol", required: false, help: 'Function or expression. Parses the value for saving.' },
         { type: "code", name: "valueFormatter", label: "Value Formatter", fill: "fullCol", required: false, help: 'A function or expression to format a value, should return a string.' },
+        { type: "code", name: "cellStyle", label: "Cell Style", fill: "fullCol", required: false, help: 'Used to provide CSS styles directly (not using a class) to the cell. Can be either an object of CSS styles, or a function returning an object of CSS styles.' },
     ]
 
     const interfaceConfigDefinitions: Record<string, InterfaceConfigProperties[]> = {
@@ -130,6 +132,17 @@ const useColumnDefinitions = () => {
                 info_url: "https://www.ag-grid.com/vue-data-grid/cell-data-types/#text",
             },
         ],
+        currentUser: [
+            commonColumnConfigurations[0],
+            commonColumnConfigurations[1],
+            {
+                type: "info",
+                name: "info",
+                fill: 'fullCol',
+                value: "The 'Current User' cell data type inserts the current user first and last name as a a read only cell.",
+            },
+
+        ],
     };
 
     return {
@@ -140,13 +153,3 @@ const useColumnDefinitions = () => {
 
 export { useColumnDefinitions };
 
-
-/**
-            // {
-            //     type: "info",
-            //     name: "info",
-            //     fill: 'fullCol',
-            //     value: "The 'date' cell data type is used for date values that are represented as Date objects.",
-            //     info_url: "https://www.ag-grid.com/vue-data-grid/cell-data-types/#date",
-            // },
- */
