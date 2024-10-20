@@ -18,7 +18,19 @@ This Directus interface extension integrates **AG-Grid** functionality into Dire
 
 ## Screens
 
-
+<figure>
+    <figurecaption>Interface definitions</figurecaption>
+    <img src="https://raw.githubusercontent.com/veryphatic/directus-extension-ag-grid-interface/main/screens/interface-definitions.png" />
+</figure>
+<figure>
+    <figurecaption>Column configuration</figurecaption>
+    <img src="https://raw.githubusercontent.com/veryphatic/directus-extension-ag-grid-interface/main/screens/configuration-1.png" />
+    <img src="https://raw.githubusercontent.com/veryphatic/directus-extension-ag-grid-interface/main/screens/configuration-2.png" />
+</figure>
+<figure>
+    <figurecaption>Grid</figurecaption>
+    <img src="https://raw.githubusercontent.com/veryphatic/directus-extension-ag-grid-interface/main/screens/ag-grid.png" />
+</figure>
 
 ## Installation
 
