@@ -4,10 +4,10 @@ import AgGridEditor from './components/AgGridEditor.vue';
 import InterfaceOptions from './components/InterfaceOptions.vue';
 
 export default defineInterface({
-	id: 'veryphatic-handsontable',
+	id: 'veryphatic-ag-grid',
 	name: 'AG-Grid Interface',
 	icon: 'table',
-	description: 'JSON formatted AG Grid Interface',
+	description: 'JSON AG-Grid Interface',
 	component: AgGridEditor,
 	options: InterfaceOptions as ComponentOptions,
 	types: ['json'],

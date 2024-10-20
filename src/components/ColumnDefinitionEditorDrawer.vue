@@ -36,8 +36,6 @@ onMounted(() => {
   inputType.value = lookupCellEditorType(column.value.cellEditor);
 });
 
-console.log("props", JSON.parse(JSON.stringify(props)));
-
 // html form input field templates
 const configurationDefinitionInputs = computed(() => {
   return interfaceConfigDefinitions[inputType.value]?.map((input) => {
@@ -78,27 +76,18 @@ const updateField = (
   }
 
   // give a hidden field if setting for the first time
-  if (properties.name === 'colId') {
+  if (properties.name === "colId") {
     columnDefinitions.value = {
       ...columnDefinitions.value,
-      field: value as string
-    }
+      field: value as string,
+    };
   }
 
   columnDefinitions.value = {
     ...columnDefinitions.value,
     [properties.name]: value,
   };
-
-  console.log("columnSettings", columnDefinitions.value);
 };
-
-// builds the emitted columnDefinitions object
-// removing extraneous properties
-// const emittedColumnDefinitions = computed(() => {
-
-//   return columnDefinitions.value.
-// })
 
 // builds the model
 const buildColumnDefinitionModelValue = (type: BaseCellDataType) => {
@@ -139,7 +128,6 @@ const isFormValid = computed(() => {
   if (!requiredInputs.length) return true;
 
   return requiredInputs.every((key) => {
-    console.log("inputsvalid", key, (columnDefinitions as any).value[key]);
     return (columnDefinitions as any).value[key] !== undefined;
   });
 });
@@ -214,7 +202,6 @@ const saveDefinition = () => {
                 :value="columnDefinitions[field.name]"
                 @input="(value: string) => updateField(field, value)"
                 language="javascript"
-                type="json"
               />
             </template>
 

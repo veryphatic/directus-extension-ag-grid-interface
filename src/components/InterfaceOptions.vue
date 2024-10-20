@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, toRaw, toRefs, nextTick } from "vue";
+import { ref, toRefs, nextTick } from "vue";
 import ColumnDefinitionEditorDrawer from "./ColumnDefinitionEditorDrawer.vue";
 import { ColDef } from "ag-grid-community";
 import { useColumnDefinitions } from "../hooks/useColumnDefinition";
@@ -12,8 +12,6 @@ const props = defineProps<{
   value: Record<string, any> | null;
   collection: string;
 }>();
-
-console.log("props ...", toRaw(props));
 
 const { value } = toRefs(props);
 
@@ -29,6 +27,7 @@ const selectedColumnDefinitionIndex = ref<number | null>(null);
 const columnDefinitionEditorOpen = ref<boolean>(false);
 
 const { cellEditors } = useColumnDefinitions();
+
 useSortable(el, columnDefinitions, {
   onUpdate: (e) => {
     // do something
@@ -86,7 +85,6 @@ const onEditDefinition = (idx: number) => {
 
 // emit action
 const emitUpdate = () => {
-  console.log("emitUpdate", columnDefinitions.value);
   emit("input", {
     columnDefinitions: columnDefinitions.value,
   });
@@ -101,12 +99,6 @@ const lookupCellEditorType = (cellEditor: string) => {
 
 <template>
   <div class="form">
-    <!-- Table options -->
-    <!-- columnSorting -->
-    <!-- height -->
-    <!-- autoWrapRow -->
-    <!-- autoWrapCol -->
-
     <div class="field">
       <p class="type-label">Column definitions</p>
 
@@ -137,7 +129,9 @@ const lookupCellEditorType = (cellEditor: string) => {
 
             <div :style="{ flexGrow: 1 }">
               <div class="label-inner">
-                <span :style="{ marginRight: '1rem'}">{{ column.headerName }}</span>
+                <span :style="{ marginRight: '1rem' }">{{
+                  column.headerName
+                }}</span>
 
                 <VChip :xSmall="true">
                   {{ lookupCellEditorType(column.cellEditor) }}
@@ -185,9 +179,7 @@ const lookupCellEditorType = (cellEditor: string) => {
 .field {
   grid-column: start/fill;
 }
-.label {
-  /* margin-bottom: 8px; */
-}
+
 .required {
   --v-icon-color: var(--theme--primary);
 }
