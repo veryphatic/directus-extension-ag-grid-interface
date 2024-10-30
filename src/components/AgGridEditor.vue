@@ -113,6 +113,7 @@ const agGridColumnDefinitions = computed(() => {
 
         // convert valueFormatters to functions
         const fnTypes = [
+          "editable",
           "valueGetter",
           "valueSetter",
           "valueParser",

@@ -19,12 +19,12 @@ const useColumnDefinitions = () => {
         { type: "string", name: "headerName", label: "Header Name", fill: "fullCol", required: true, help: 'The name to render in the column header.' },
         { type: "string", name: "colId", label: "Column ID", fill: "fullCol", required: true, help: 'This column\'s unique ID (cannot be changed after save)', transformValue: 'snakecase' },
         { type: "checkbox", name: "hide", label: "Hidden", fill: "halfCol", required: false, help: 'Set to true for this column to be hidden.' },
-        { type: "checkbox", name: "editable", label: "Editable", fill: "halfCol", required: false, help: 'Set to `true` if this column is editable, otherwise `false`.' },
         { type: "checkbox", name: "singleClickEdit", label: "Single Click Edit", fill: "halfCol", required: false, help: ' Set to `true` to have the text wrap inside the cell - typically used with `autoHeight`.' },
         { type: "checkbox", name: "autoHeight", label: "Auto Height", fill: "halfCol", required: false, help: 'Set to `true` to have the grid calculate the height of a row based on contents of this column.' },
         { type: "checkbox", name: "wrapText", label: "Wrap Text", fill: "halfCol", required: false, help: 'Set to `true` to have cells under this column enter edit mode after single click.' },
         { type: "number", name: "width", label: "Width", fill: "halfCol", required: false, help: 'Initial width in pixels for the cell.' },
         { type: "number", name: "flex", label: "Flex", fill: "halfCol", required: false, help: 'Used instead of `width` when the goal is to fill the remaining empty space of the grid.' },
+        { type: "code", name: "editable", label: "Editable", fill: "fullCol", required: false, help: 'Function or expression. Set to `true` if this column is editable, otherwise `false`.' },
         { type: "code", name: "valueGetter", label: "Value Getter", fill: "fullCol", required: false, help: 'Function or expression. Gets the value from your data for display.' },
         { type: "code", name: "valueSetter", label: "Value Setter", fill: "fullCol", required: false, help: 'Function or expression. Sets the value into your data for saving. Return `true` if the data changed.' },
         { type: "code", name: "valueParser", label: "Value Parser", fill: "fullCol", required: false, help: 'Function or expression. Parses the value for saving.' },
@@ -135,6 +135,8 @@ const useColumnDefinitions = () => {
         currentUser: [
             commonColumnConfigurations[0],
             commonColumnConfigurations[1],
+            commonColumnConfigurations[6],
+            commonColumnConfigurations[7],
             {
                 type: "info",
                 name: "info",
