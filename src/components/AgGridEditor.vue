@@ -14,7 +14,7 @@ import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-quartz.css";
 
 import { AgGridVue } from "@ag-grid-community/vue3";
-import { ColDef } from "ag-grid-community";
+import { ColDef, GridOptions } from "ag-grid-community";
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 import { ModuleRegistry } from "@ag-grid-community/core";
 
@@ -40,13 +40,14 @@ const props = defineProps<{
 
   // interface props
   columnDefinitions: ColDef[];
+  gridOptions: GridOptions;
 }>();
 
 const emit = defineEmits<{
   (e: "input", value: Record<string, any> | null): void;
 }>();
 
-const { value, columnDefinitions } = toRefs(props);
+const { value, columnDefinitions, gridOptions } = toRefs(props);
 
 const currentUser = ref();
 const gridApi = shallowRef();
@@ -234,6 +235,7 @@ const emitUpdate = () => {
       :rowData="rowData"
       :columnDefs="gridColumnDefinitions"
       domLayout="autoHeight"
+      :grid-options="gridOptions ?? {}"
       @cell-value-changed="updateGridData"
       :dataTypeDefinitions="dataTypeDefinitions"
       style="width: 100%"
@@ -244,3 +246,9 @@ const emitUpdate = () => {
     <VButton @click="addRow" small>Add Row</VButton>
   </div>
 </template>
+
+<style lang="css">
+.ag-header-cell-text {
+  text-wrap: wrap;
+}
+</style>

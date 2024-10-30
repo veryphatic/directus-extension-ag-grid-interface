@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, toRefs, nextTick } from "vue";
 import ColumnDefinitionEditorDrawer from "./ColumnDefinitionEditorDrawer.vue";
-import { ColDef } from "ag-grid-community";
+import { ColDef, GridOptions } from "ag-grid-community";
 import { useColumnDefinitions } from "../hooks/useColumnDefinition";
 import {
   useSortable,
@@ -25,6 +25,10 @@ const columnDefinitions = ref<ColDef[]>(value.value?.columnDefinitions ?? []);
 const selectedColumnDefinition = ref<Partial<ColDef>>();
 const selectedColumnDefinitionIndex = ref<number | null>(null);
 const columnDefinitionEditorOpen = ref<boolean>(false);
+
+const gridOptions = ref<Partial<GridOptions>>({
+  headerHeight: value.value.gridOptions.headerHeight ?? 50,
+});
 
 const { cellEditors } = useColumnDefinitions();
 
@@ -87,6 +91,7 @@ const onEditDefinition = (idx: number) => {
 const emitUpdate = () => {
   emit("input", {
     columnDefinitions: columnDefinitions.value,
+    gridOptions: gridOptions.value,
   });
 };
 
@@ -100,7 +105,7 @@ const lookupCellEditorType = (cellEditor: string) => {
 <template>
   <div class="form">
     <div class="field">
-      <p class="type-label">Column definitions</p>
+      <h3 class="type-label">Column definitions</h3>
 
       <!-- list of column configurations -->
 
@@ -163,6 +168,18 @@ const lookupCellEditorType = (cellEditor: string) => {
           @close="onCloseColumnDefinition"
         />
       </template>
+    </div>
+
+    <div class="field">
+      <h3 class="type-label" :style="{ marginBottom: '1rem' }">Grid options</h3>
+
+      <div class="label type-label">
+        <span>Header height</span>
+      </div>
+      <v-input
+        v-model="gridOptions['headerHeight']"
+        @update:modelValue="emitUpdate"
+      />
     </div>
   </div>
 </template>
