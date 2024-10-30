@@ -2,7 +2,7 @@
   "name": "directus-extension-ag-grid-interface",
   "description": "Directus AG-Grid interface extension.",
   "icon": "extension",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Nathen Street (https://github.com/veryphatic/directus-extension-ag-grid-interface)",
   "keywords": [
     "directus",
