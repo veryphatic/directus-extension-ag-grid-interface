@@ -13,7 +13,7 @@ export function getDefaultValue(cellEditor: string, currentUser: string) {
             break;
         case "agDateCellEditor":
         case "agDateStringCellEditor":
-            value = null; // this makes for bad ui -> new Date().toISOString();
+            value = new Date().toISOString().split('T')[0]; // this makes for bad ui -> new Date().toISOString();
             break;
         case "agSelectCellEditor":
             value = "";
