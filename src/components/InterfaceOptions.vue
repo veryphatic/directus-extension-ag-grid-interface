@@ -27,7 +27,7 @@ const selectedColumnDefinitionIndex = ref<number | null>(null);
 const columnDefinitionEditorOpen = ref<boolean>(false);
 
 const gridOptions = ref<Partial<GridOptions>>({
-  headerHeight: value.value.gridOptions.headerHeight ?? 50,
+  headerHeight: value.value?.gridOptions?.headerHeight ?? 50,
 });
 
 const { cellEditors } = useColumnDefinitions();
